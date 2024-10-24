@@ -18,7 +18,7 @@ def InialGame():
     ]
 
     games_scores = [[game, -1, -1] for game in games]
-    games_scores = [["Total", 0, 0]]
+    games_scores.append(["Total", 0, 0])
     return games_scores
 
 
@@ -59,24 +59,75 @@ def Transition(state, player, game_number, score):
     state_list = list(state)
     state_list[(player+1)* game_number]=1
     state_list[0]= int(not player)
+    print(score)
+    print(player) 
     state_list[player+27] += score
+    print(tuple(state_list))
     return tuple(state_list)
 
 def Validation(state, player, game_number):
     if state[(player+1)* game_number] == 1:
         return False
     return True
+
+def PlayerChoose(games_scores):
+    dices = [[0, 0, 0, 0, 0],[0, 0, 0, 0, 0]]
+    count = 0 
+
+    while count< 3:
+        
+        RollDice(dices)
+        print("Roll dices: ", dices[1])
+
+        PrintTable(games_scores)
+
+        print("Winning points' games: ")
+        PrintWinningPointsGames(dices,games_scores,0)
+
+        response = input("Do you want to select a game? y/n :").strip() 
+        if response.lower() == "y":
+
+            game_name = input("Write the name of the game: ").strip() 
+
+            if game_name in game_numbers:
+                game_index = game_numbers[game_name]
+                score = game_functions[game_name](dices)
+                games_scores[game_index][1] = score  
+
+                return game_name, score
+                
+            else:
+                print("Invalid game name. Please try again.")
+
+        else:
+
+            response=input("Choose the dices you want to keep: ")
+            dices_to_keep = list(map(int, response.split()))
+            for dice in dices_to_keep:
+                dices[0][dice]=1
+        
+    game_name = input("You can't roll dices again. Please choose a game: ").strip() 
+
+    if game_name in game_numbers:
+        game_index = game_numbers[game_name]
+        score = game_functions[game_name](dices)
+        games_scores[game_index][1] = score  
+
+        return game_name, score
+        
+    else:
+        print("Invalid game name. Please try again.")
+
     
 
-def ComputerChoose(dices,games_scores):
+    
 
-    dices = [
-                [0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0]
-            ]
+def ComputerChoose(games_scores):
+
+    dices = [[0, 0, 0, 0, 0],[0, 0, 0, 0, 0]]
     count =0
 
-    while (count < 3):
+    while count < 3:
         RollDice(dices)
         print("Computer rolls: ", dices[1])
 
@@ -100,76 +151,36 @@ def ComputerChoose(dices,games_scores):
                 dices[0][dice] = 1
             count += 1 
         
-        selected_game = random.choice(available_games)
-        game_name = selected_game[0]
-        game_index = game_numbers[game_name] - 1
+    selected_game = random.choice(available_games)
+    game_name = selected_game[0]
+    game_index = game_numbers[game_name] - 1
 
-        score = game_functions[game_name](dices)
-        games_scores[game_index][2] = score  
-        
-        print(f"Computer chooses {game_name} and scores {score}")
-        return game_name, score
+    score = game_functions[game_name](dices)
+    games_scores[game_index][2] = score  
+    
+    print(f"Computer chooses {game_name} and scores {score}")
+    return game_name, score
         
 
 
 def Game(state, games_scores):
    
-
-    count =0
-
     while not isFinalState(state):
 
         if state[0]==0:
             print("Your turn:")
-            dices = [
-                [0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0]
-            ]
-            while count< 3:
-                
-                RollDice(dices)
-                print("Roll dices: ", dices[1])
-
-                PrintTable(games_scores)
-
-                print("Winning points' games: ")
-                PrintWinningPointsGames(dices,games_scores,state[0])
-
-                response = input("Do you want to select a game? y/n :").strip() 
-                
-                
-                if response.lower() == "y":
-
-                    response = input("Write the name of the game: ").strip() 
-
-                    if response in game_numbers:
-                        game_index = game_numbers[response]
-                        score = game_functions[response](dices)
-                        games_scores[game_index][1] = score  
-                        if Validation(state, 0, game_index):
-                            state = Transition(state, 0, game_index,score)
-                    else:
-                        print("Invalid game name. Please try again.")
-
-                else:
-
-                    response=input("Choose the dices you want to keep: ")
-                    dices_to_keep = list(map(int, response.split()))
-                    for dice in dices_to_keep:
-                        dices[0][dice]=1
-
+            game_name, score = PlayerChoose(games_scores)
+            
         else:
             
             print("Computer's turn:")
-         
-            game_name, score = ComputerChoose(dices, games_scores)
+            game_name, score = ComputerChoose(games_scores)
 
-            if Validation(state,1,game_numbers[game_name]):
-                return Transition(state, 1, game_numbers[game_name],score)
+        if Validation(state,state[0],game_numbers[game_name]):
+                state = Transition(state, state[0], game_numbers[game_name],score)
             
-                # Numărăm aruncările
 
-            return state
+
 
 
 
