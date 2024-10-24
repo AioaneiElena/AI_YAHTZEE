@@ -82,7 +82,7 @@ def Four_of_a_kind(dices):
         sum=sum+dice
 
     for count in counts.values():
-        if count >= 4:
+        if count == 4:
            return sum
     return 0
 
