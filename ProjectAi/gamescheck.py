@@ -1,5 +1,3 @@
-
-
 def Ones(dices):
     sum=0
     for dice in dices[1]:
