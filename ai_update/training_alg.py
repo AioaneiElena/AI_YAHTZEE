@@ -2,13 +2,14 @@ import random
 import numpy as np
 from itertools import product
 
+
 class YahtzeeTraining:
     def __init__(self, num_dice=5, sides=6, alpha=0.1, gamma=0.9, epsilon=1.0, epsilon_min=0.01, epsilon_decay=0.995):
         self.num_dice = num_dice
         self.sides = sides
         self.alpha = alpha
         self.gamma = gamma
-        self.epsilon = epsilon 
+        self.epsilon = epsilon
         self.epsilon_min = epsilon_min  # Valoarea minimă la care poate ajunge epsilon
         self.epsilon_decay = epsilon_decay  # Factorul de scădere a epsilon-ului
 
@@ -18,29 +19,29 @@ class YahtzeeTraining:
     def initialize_all_states(self):
         for state in product(range(self.num_dice + 1), repeat=self.sides):
             if sum(state) == self.num_dice:
-                self.q_table[state] = [0] * 13  
+                self.q_table[state] = [0] * 13
 
     def initialize_state(self, dice_roll):
-        #Convertirea aruncării zarurilor într-o stare.
+        # Convertirea aruncării zarurilor într-o stare.
         state = tuple(dice_roll.count(i) for i in range(1, self.sides + 1))
         return state
 
     def choose_action(self, state):
         if random.uniform(0, 1) < self.epsilon:
-            return random.randint(0, len(self.q_table[state]) - 1) 
+            return random.randint(0, len(self.q_table[state]) - 1)
         else:
             return np.argmax(self.q_table[state])  # Acțiune optimă
-    
+
     def choose_next_action(self, state, last_games):
         if random.uniform(0, 1) < self.epsilon:
             available_actions = [i for i in range(len(self.q_table[state])) if i not in last_games]
             return random.choice(available_actions)
         else:
             available_actions = [i for i in range(len(self.q_table[state])) if i not in last_games]
-            
+
             # Extrage scorurile Q doar pentru jocurile nealese
             q_values_for_available_actions = [self.q_table[state][i] for i in available_actions]
-            
+
             # Alege indexul jocului cu cel mai mare scor Q
             best_action = available_actions[np.argmax(q_values_for_available_actions)]
             return best_action
@@ -53,11 +54,10 @@ class YahtzeeTraining:
 
     def simulate_roll(self):
         if random.randint(1, 100) <= 20:  # 20% șansă de a obține 5 zaruri identice
-            value = random.randint(1, self.sides) 
-            return [value] * self.num_dice  
+            value = random.randint(1, self.sides)
+            return [value] * self.num_dice
         else:
-            return [random.randint(1, self.sides) for _ in range(self.num_dice)] 
-
+            return [random.randint(1, self.sides) for _ in range(self.num_dice)]
 
     def train(self, episodes):
         for episode in range(episodes):
@@ -66,7 +66,7 @@ class YahtzeeTraining:
 
             action = self.choose_action(state)
 
-            next_state = self.initialize_state(dice_roll) 
+            next_state = self.initialize_state(dice_roll)
 
             reward = self.calculate_reward(action, dice_roll)
             self.update_q_table(state, action, reward, next_state)
@@ -75,8 +75,7 @@ class YahtzeeTraining:
 
             # Reducerea epsilon-ului la fiecare episod
             if self.epsilon > self.epsilon_min:
-                self.epsilon *= self.epsilon_decay 
-
+                self.epsilon *= self.epsilon_decay
 
     def calculate_reward(self, action, dice_roll):
         counts = [dice_roll.count(i) for i in range(1, self.sides + 1)]
@@ -91,11 +90,11 @@ class YahtzeeTraining:
             5: 5 * 6,  # Sixes
             6: 6 * 3,  # Three-of-a-kind
             7: 6 * 4,  # Four-of-a-kind
-            8: 24,     # Full House
-            9: 28,     # Small Straight
-            10: 35,    # Large Straight
-            11: 40,    # Chance
-            12: 40     # Yahtzee (valoare mai mica ca sa fie reward mai mare)
+            8: 24,  # Full House
+            9: 28,  # Small Straight
+            10: 35,  # Large Straight
+            11: 40,  # Chance
+            12: 40  # Yahtzee (valoare mai mica ca sa fie reward mai mare)
         }
 
         if action == 0:  # Ones
@@ -127,30 +126,25 @@ class YahtzeeTraining:
                         break  # După ce găsim primul număr care se repetă de 4 ori, ieșim din buclă
         elif action == 8:  # Full House
             if sorted(counts) == [0, 0, 0, 0, 2, 3]:
-                reward = 25  
+                reward = 25
         elif action == 9:  # Small Straight
             small_straights = [[1, 1, 1, 1, 0, 0], [0, 1, 1, 1, 1, 0], [0, 0, 1, 1, 1, 1]]
             if any(counts == s for s in small_straights):
-                reward = 30  
+                reward = 30
         elif action == 10:  # Large Straight
             large_straights = [[1, 1, 1, 1, 1, 0], [0, 1, 1, 1, 1, 1]]
             if any(counts == s for s in large_straights):
-                reward = 40  
+                reward = 40
         elif action == 11:  # Chance
-            reward = sum(dice_roll) 
+            reward = sum(dice_roll)
         elif action == 12:  # Yahtzee
             if any(count == 5 for count in counts):
-                reward = 50 
-        
+                reward = 50
+
         max_reward = max_rewards[action]
         normalized_reward = (reward / max_reward) * 100
 
         return normalized_reward
-
-
-
-
-
 
 
 # Print Q-table
