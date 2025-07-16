@@ -1,0 +1,52 @@
+# 🎲 Yahtzee AI – Smart Dice Game with Q-Learning & Chat Assistant
+
+**Yahtzee AI** is a Python-based desktop game that brings the classic Yahtzee experience to life with a modern twist: a built-in AI opponent trained via Q-learning. The game supports 1v1 gameplay, Player vs AI, personalized move recommendations, user statistics, and an interactive chatbot that teaches the rules and strategies of Yahtzee.
+
+---
+
+## 🚀 Features
+
+- 🎮 Play against another player or an AI opponent trained with Q-learning  
+- 🧠 The AI uses a trained Q-table to choose optimal actions based on game state  
+- 💬 Integrated chatbot that explains game rules, scoring combinations, and strategies  
+- 💡 Personalized HINT system suggests the best move based on your current dice  
+- 📊 Game statistics stored in a local JSON file (scores, averages, progress)  
+- 🪟 Graphical interface built with `tkinter` – simple, responsive, and interactive
+
+---
+
+## 🧠 AI Training (Q-Learning)
+
+The AI agent is trained using a classical **Q-learning** algorithm, with the following parameters:
+
+- State space: all combinations of dice rolls (5 dice × 6 sides)  
+- Action space: 13 scoring categories  
+- Reward: based on normalized expected score for each action  
+- Exploration: epsilon-greedy strategy with decay  
+- Training: ~900,000 simulated episodes before gameplay
+
+---
+
+## 🛠️ Technologies Used
+
+- 🐍 Python 3.11  
+- 🎲 `tkinter` for GUI  
+- 📚 `numpy`, `itertools`, `json`, `random` for logic and simulation  
+- 🧠 Custom Q-table implementation (no external RL libraries)  
+
+---
+
+## 📦 Installation
+
+To run the game locally:
+
+### 1. Clone the repository
+```bash
+git clone https://github.com/username/yahtzee-ai.git
+cd yahtzee-ai
+```
+
+### 2. Run the game
+Make sure you have Python 3.10+ installed, then run:
+python main.py
+
