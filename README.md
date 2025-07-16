@@ -56,5 +56,6 @@ cd yahtzee-ai
 
 ### 2. Run the game
 Make sure you have Python 3.10+ installed, then run:
+```bash
 python main.py
-
+```
