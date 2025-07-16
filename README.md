@@ -3,6 +3,14 @@
 **Yahtzee AI** is a Python-based desktop game that brings the classic Yahtzee experience to life with a modern twist: a built-in AI opponent trained via Q-learning. The game supports 1v1 gameplay, Player vs AI, personalized move recommendations, user statistics, and an interactive chatbot that teaches the rules and strategies of Yahtzee.
 
 ---
+This project was developed as part of an academic assignment at the Faculty of Computer Science,
+"Alexandru Ioan Cuza" University of Iași.
+
+Collaborative project by:
+
+🧑‍💻 Elena Aioanei
+
+👩‍💻 Ana Petrașuc
 
 ## 🚀 Features
 
