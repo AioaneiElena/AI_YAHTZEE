@@ -59,3 +59,9 @@ Make sure you have Python 3.10+ installed, then run:
 ```bash
 python main.py
 ```
+## Photos
+<img width="1218" height="600" alt="Screenshot 2025-07-17 025400" src="https://github.com/user-attachments/assets/6c817df5-7988-447d-9962-1f9fa0e2191f" />
+<img width="1219" height="595" alt="Screenshot 2025-07-17 025414" src="https://github.com/user-attachments/assets/425bf4fd-5eb6-4f09-87c0-26c83ac5d517" />
+<img width="1216" height="600" alt="Screenshot 2025-07-17 025407" src="https://github.com/user-attachments/assets/c083172e-93c7-4e0f-9161-94c7b3a6d52c" />
+<img width="1218" height="625" alt="Screenshot 2025-07-17 025427" src="https://github.com/user-attachments/assets/817df476-33c3-428f-9d8f-0b9347df5a09" />
+
